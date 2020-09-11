@@ -40,14 +40,20 @@
 @class ORKTaskViewController;
 @class ORKLearnMoreInstructionStep;
 @class ORKStepViewController;
+@class ORKStep;
+@class ORKTaskViewController;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol ORKReviewViewControllerDelegate <NSObject>
 
 @required
+
+
+- (void)reviewViewController:(ORKReviewViewController *)reviewViewController willPresentTaskViewController:(ORKTaskViewController *)taskViewController;
 - (void)reviewViewController:(ORKReviewViewController *)reviewViewController didUpdateResult:(ORKTaskResult *)updatedResult source:(ORKTaskResult *)resultSource;
 - (void)reviewViewControllerDidSelectIncompleteCell:(ORKReviewViewController *)reviewViewController;
+
 @optional
 - (void)taskViewController:(ORKTaskViewController *)taskViewController learnMoreButtonPressedWithStep:(ORKLearnMoreInstructionStep *)learnMoreStep;
 @end
@@ -56,11 +62,15 @@ ORK_CLASS_AVAILABLE
 @interface ORKReviewViewController : UIViewController
 
 - (instancetype)initWithTask:(ORKOrderedTask *)task result:(ORKTaskResult *)result delegate:(id<ORKReviewViewControllerDelegate>)delegate;
+- (instancetype)initWithNavigableTask:(ORKNavigableOrderedTask *)task result:(ORKTaskResult *)result delegate:(id<ORKReviewViewControllerDelegate>)delegate;
 - (instancetype)initWithTask:(ORKNavigableOrderedTask *)task delegate:(id<ORKReviewViewControllerDelegate>)delegate isCompleted:(BOOL)isCompleted incompleteText:(NSString *)incompleteText;
 
 - (void)updateResultSource:(ORKTaskResult *)result forTask:(ORKOrderedTask *)task;
 
 - (void)updateResultSource:(ORKTaskResult *)result;
+
+- (nullable ORKNavigableOrderedTask *)taskForStep:(nullable ORKStep *)step sourceTask:(ORKNavigableOrderedTask *)sourceTask;
+- (nullable ORKStep *)stepForIdentifier:(NSString *)identifier;
 
 @property (nonatomic, weak)id<ORKReviewViewControllerDelegate> delegate;
 

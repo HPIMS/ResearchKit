@@ -49,6 +49,7 @@
 #import "ORKStepViewController_Internal.h"
 #import "ORKReviewIncompleteCell.h"
 #import "ORKNavigableOrderedTask.h"
+#import "ORKTask.h"
 
 static const float FirstSectionHeaderPadding = 24.0;
 
@@ -80,6 +81,20 @@ static const float FirstSectionHeaderPadding = 24.0;
     }
     return self;
 }
+
+-(instancetype)initWithNavigableTask:(ORKNavigableOrderedTask *)task result:(ORKTaskResult *)result delegate:(id<ORKReviewViewControllerDelegate>)delegate{
+    self = [super init];
+    if (self) {
+        _steps = task.steps;
+        _navigableOrderedTask = task;
+        _resultSource = result;
+        _delegate = delegate;
+        _isCompleted = YES;
+        [self createReviewSectionsWithDefaultResultSource:_resultSource];
+    }
+    return self;
+}
+
 
 - (instancetype)initWithTask:(ORKNavigableOrderedTask *)task delegate:(id<ORKReviewViewControllerDelegate>)delegate isCompleted:(BOOL)isCompleted incompleteText:(NSString *)incompleteText {
     self = [super init];
@@ -189,6 +204,8 @@ static const float FirstSectionHeaderPadding = 24.0;
             ORKFormStep *formStep = (ORKFormStep *)step;
             ORKStepResult *result = [defaultResultSource stepResultForStepIdentifier:formStep.identifier];
             if (result) {
+                NSLog(@"REview result");
+                
                 [_reviewSections addObject:[self reviewSectionForFormStep:formStep withResult:result]];
             }
         }
@@ -209,8 +226,14 @@ static const float FirstSectionHeaderPadding = 24.0;
             if (formItem.answerFormat) {
                 ORKResult *formItemResult = [result resultForIdentifier:formItem.identifier];
                 ORKReviewItem *formReviewItem = [[ORKReviewItem alloc] init];
+                NSLog(@"%@",formItem.text);
                 if (formItem.text) {
-                    formReviewItem.question = formItem.text;
+                    if ([formItem.text isEqualToString:@" "]){
+                        formReviewItem.question = _currentSectionTitle;
+                    }else{
+                        formReviewItem.question = formItem.text;
+                    }
+                    
                 } else {
                     // formItem.text will return nil if a question was constructed as follows
                     // - you create a section header with the ORKFormItem(sectionTitle: API
@@ -240,6 +263,7 @@ static const float FirstSectionHeaderPadding = 24.0;
 
 - (NSString *)answerStringForFormItem:(ORKFormItem *)formItem withFormItemResult:(ORKResult *)formItemResult {
     NSString *answerString = nil;
+    NSLog(@"%@",formItemResult);
     if (formItem && formItemResult && [formItemResult isKindOfClass:[ORKQuestionResult class]]) {
         ORKQuestionResult *questionResult = (ORKQuestionResult *)formItemResult;
         if (formItem.answerFormat && [questionResult isKindOfClass:formItem.answerFormat.questionResultClass] && questionResult.answer) {
@@ -402,19 +426,43 @@ static const float FirstSectionHeaderPadding = 24.0;
     return nil;
 }
 
+- (nullable ORKNavigableOrderedTask *)taskForStep:(nullable ORKStep *)step sourceTask:(ORKNavigableOrderedTask *)sourceTask {
+    return nil;
+}
+
 - (void)footerButtonTappedForSection:(id)sender {
     UIButton *button = (UIButton *)sender;
     
-    ORKOrderedTask *subOrderedTask = [[ORKOrderedTask alloc] initWithIdentifier:[[NSUUID UUID] UUIDString] steps:@[[self stepForIdentifier:_reviewSections[button.tag].stepIdentifier]]];
-    ORKTaskViewController *taskViewController = [[ORKTaskViewController alloc] initWithTask:subOrderedTask taskRunUUID:[NSUUID UUID]];
+    if (_navigableOrderedTask != nil) {
+        ORKNavigableOrderedTask *subNavigableOrderedTask = [self taskForStep:[self stepForIdentifier:_reviewSections[button.tag].stepIdentifier] sourceTask:_navigableOrderedTask ];
+        if (subNavigableOrderedTask != nil) {
+            ORKTaskViewController *taskViewController = [[ORKTaskViewController alloc] initWithTask:subNavigableOrderedTask taskRunUUID:[NSUUID UUID]];
+            [self presentTaskViewController: taskViewController];
+        }else {
+            [NSException raise:@"Can not be nil" format:@"Not supposed to be nil"];
+        }
+    }else{
+        ORKOrderedTask *subOrderedTask = [[ORKOrderedTask alloc] initWithIdentifier:[[NSUUID UUID] UUIDString] steps:@[[self stepForIdentifier:_reviewSections[button.tag].stepIdentifier]]];
+        ORKTaskViewController *taskViewController = [[ORKTaskViewController alloc] initWithTask:subOrderedTask taskRunUUID:[NSUUID UUID]];
+        [self presentTaskViewController:taskViewController];
+    }
+    
+
+}
+
+-(void)presentTaskViewController:(ORKTaskViewController *)taskViewController{
     taskViewController.delegate = self;
     [taskViewController.navigationBar setTranslucent:YES];
     taskViewController.navigationBar.prefersLargeTitles = NO;
     taskViewController.defaultResultSource = _resultSource;
     taskViewController.discardable = YES;
     taskViewController.showsProgressInNavigationBar = NO;
+    if (_delegate && [_delegate respondsToSelector:@selector(reviewViewController:willPresentTaskViewController:)]) {
+        [_delegate reviewViewController:self willPresentTaskViewController: taskViewController];
+    }
     [self presentViewController:taskViewController animated:YES completion:nil];
 }
+
 
 #pragma mark - UItableViewDelegate
 
@@ -441,9 +489,9 @@ static const float FirstSectionHeaderPadding = 24.0;
     [taskViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)taskViewController:(ORKTaskViewController *)taskViewController stepViewControllerWillAppear:(ORKStepViewController *)stepViewController {
-    stepViewController.shouldPresentInReview = _isCompleted;
-}
+//- (void)taskViewController:(ORKTaskViewController *)taskViewController stepViewControllerWillAppear:(ORKStepViewController *)stepViewController {
+//    stepViewController.shouldPresentInReview = _isCompleted;
+//}
 
 - (void)taskViewController:(ORKTaskViewController *)taskViewController learnMoreButtonPressedWithStep:(ORKLearnMoreInstructionStep *)learnMoreStep forStepViewController:(ORKStepViewController *)stepViewController {
     if (_delegate && [_delegate respondsToSelector:@selector(taskViewController:learnMoreButtonPressedWithStep:)]) {
