@@ -35,6 +35,7 @@
 #import "ORKStepView_Private.h"
 #import "ORKNavigationContainerView.h"
 #import "ORKHelpers_Internal.h"
+#import "ORKSkin.h"
 
 static const CGFloat ORKScrollViewCustomContentInset = 40.0;
 
@@ -62,7 +63,8 @@ static const CGFloat ORKScrollViewCustomContentInset = 40.0;
     self.navigationController.navigationBar.shadowImage = [UIImage new];
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:ORKLocalizedString(@"BUTTON_DONE", nil) style:UIBarButtonItemStyleDone target:self action:@selector(doneButtonPressed:)];
-    
+    self.navigationItem.rightBarButtonItem.tintColor = ORKColor(ORKBlueHighlightColorKey);
+
     if (self.stepView.navigationFooterView.isHidden) {
         [self.stepView setScrollViewCustomContentInset: ORKScrollViewCustomContentInset];
     }
