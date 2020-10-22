@@ -55,6 +55,7 @@
 /* Consent section learn more */
 "LEARN_MORE_DATA_GATHERING" = "Learn more about how data is gathered";
 "LEARN_MORE_DATA_USE" = "Learn more about how data is used";
+//"LEARN_MORE_PRIVACY" = "";
 "LEARN_MORE_PRIVACY" = "Learn more about how your privacy and identity are protected";
 "LEARN_MORE_WELCOME" = "Learn more about the study first";
 "LEARN_MORE_STUDY_SURVEY" = "Learn more about the study survey";
