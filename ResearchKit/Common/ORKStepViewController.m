@@ -67,8 +67,13 @@ static const CGFloat iPadStepTitleLabelFontSize = 50.0;
 
 - (void)initializeInternalButtonItems {
     _internalContinueButtonItem = [[UIBarButtonItem alloc] initWithTitle:ORKLocalizedString(@"BUTTON_NEXT", nil) style:UIBarButtonItemStylePlain target:self action:@selector(goForward)];
+    
+    
+    
     _internalDoneButtonItem = [[UIBarButtonItem alloc] initWithTitle:ORKLocalizedString(@"BUTTON_DONE", nil) style:UIBarButtonItemStyleDone target:self action:@selector(goForward)];
+    
     _internalSkipButtonItem = [[UIBarButtonItem alloc] initWithTitle:ORKLocalizedString(@"BUTTON_SKIP", nil) style:UIBarButtonItemStylePlain target:self action:@selector(skip:)];
+    
     _backButtonItem = nil;
 }
 

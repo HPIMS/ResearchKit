@@ -441,6 +441,9 @@ const CGFloat PDFhideViewAnimationDuration = 0.5;
     _pdfThumbnailView.PDFView = _pdfView;
     _pdfThumbnailView.hidden = YES;
 
+    
+    
+    
     [self updateActionButtonsAppearance];
 }
 
