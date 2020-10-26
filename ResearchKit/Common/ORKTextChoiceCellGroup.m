@@ -154,9 +154,11 @@
     ORKChoiceViewCell *touchedCell = [self cellAtIndex:index withReuseIdentifier:nil];
     ORKTextChoice *textChoice = [_helper textChoiceAtIndex:index];
     
+    
     if ([textChoice isKindOfClass:[ORKTextChoiceOther class]] && [touchedCell isKindOfClass:[ORKChoiceOtherViewCell class]]) {
         ORKTextChoiceOther *otherTextChoice = (ORKTextChoiceOther *)textChoice;
         ORKChoiceOtherViewCell *touchedOtherCell = (ORKChoiceOtherViewCell *)touchedCell;
+      //  [touchedOtherCell setBackgroundColor: [UIColor greenColor]];
         [self updateTextViewForChoiceOtherCell:touchedOtherCell withTextChoiceOther:otherTextChoice];
         if (!otherTextChoice.textViewInputOptional && otherTextChoice.textViewText.length <= 0) {
             return;
