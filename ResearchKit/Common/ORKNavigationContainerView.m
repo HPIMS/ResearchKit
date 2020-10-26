@@ -146,7 +146,7 @@ static const CGFloat activityIndicatorPadding = 24.0;
 }
 
 - (void)didMoveToWindow {
-    _appTintColor = self.window.tintColor ? : ORKColor(ORKBlueHighlightColorKey);
+    _appTintColor = self.window.tintColor ? : ORKColor(ORKPinkHighlightColorKey);
     _continueButton.normalTintColor = _appTintColor;
     _skipButton.normalTintColor = _appTintColor;
 }

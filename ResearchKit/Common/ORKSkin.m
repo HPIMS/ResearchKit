@@ -42,6 +42,7 @@ NSString *const ORKLightTintColorKey = @"ORKLightTintColorKey";
 NSString *const ORKDarkTintColorKey = @"ORKDarkTintColorKey";
 NSString *const ORKCaptionTextColorKey = @"ORKCaptionTextColorKey";
 NSString *const ORKBlueHighlightColorKey = @"ORKBlueHighlightColorKey";
+NSString *const ORKPinkHighlightColorKey = @"ORKPinkHighlightColorKey";
 NSString *const ORKChartDefaultTextColorKey = @"ORKChartDefaultTextColorKey";
 NSString *const ORKGraphAxisColorKey = @"ORKGraphAxisColorKey";
 NSString *const ORKGraphAxisTitleColorKey = @"ORKGraphAxisTitleColorKey";
@@ -148,6 +149,7 @@ static NSMutableDictionary *colors() {
                     ORKDarkTintColorKey: ORKRGB(0x888888),
                     ORKCaptionTextColorKey: ORKRGB(0xcccccc),
                     ORKBlueHighlightColorKey: [UIColor colorWithRed:0.0 green:122.0 / 255.0 blue:1.0 alpha:1.0],
+                    ORKPinkHighlightColorKey:[UIColor colorWithRed: 204.0/255.0 green: 27.0/255.0 blue: 98.0/255.0 alpha: 1.0],
                     ORKChartDefaultTextColorKey: [UIColor lightGrayColor],
                     ORKGraphAxisColorKey: [UIColor colorWithRed:217.0 / 255.0 green:217.0 / 255.0 blue:217.0 / 255.0 alpha:1.0],
                     ORKGraphAxisTitleColorKey: [UIColor colorWithRed:142.0 / 255.0 green:142.0 / 255.0 blue:147.0 / 255.0 alpha:1.0],

@@ -59,6 +59,9 @@ ORK_EXTERN NSString *const ORKCaptionTextColorKey;
 /// Color used for a "blue" highlight
 ORK_EXTERN NSString *const ORKBlueHighlightColorKey;
 
+/// Color used for a "pink" highlight
+ORK_EXTERN NSString *const ORKPinkHighlightColorKey;
+
 /// Default color used for legend, title and text on ORKPieChartView
 ORK_EXTERN NSString *const ORKChartDefaultTextColorKey;
 
