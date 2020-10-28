@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ORKChoiceOtherViewCell : ORKChoiceViewCell <UITextViewDelegate>
 
-@property (nonatomic, strong, readonly) ORKAnswerTextView *textView;
+@property (nonatomic, strong) ORKAnswerTextView *textView;
 
 @property (nonatomic, assign, setter=hideTextView:) BOOL textViewHidden;
 

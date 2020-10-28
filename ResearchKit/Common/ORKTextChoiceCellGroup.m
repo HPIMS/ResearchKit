@@ -95,6 +95,7 @@
             ORKChoiceOtherViewCell *choiceOtherViewCell = [[ORKChoiceOtherViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
             ORKTextChoiceOther *textChoiceOther = (ORKTextChoiceOther *)textChoice;
             choiceOtherViewCell.textView.placeholder = textChoiceOther.textViewPlaceholderText;
+         //   textChoiceOther.textViewText = @"dfgdfgdf";
             choiceOtherViewCell.textView.text = textChoiceOther.textViewText;
             [choiceOtherViewCell hideTextView:textChoiceOther.textViewStartsHidden];
             cell = choiceOtherViewCell;
@@ -222,7 +223,50 @@
         ORK_Log_Error("Error getting selected indexes: %@", exception.reason);
     } @finally {
         [self setSelectedIndexes: selectedIndexes];
+        NSString *choiceAnswer = [self stringForChoiceAnswer:answer];
+        NSLog(@"%@", choiceAnswer);
+        if ([choiceAnswer length] > 0) {
+            [self setValueToTextFild: selectedIndexes withAnswer:choiceAnswer];
+        }
+        
     }
+}
+
+- (NSString *)stringForChoiceAnswer:(id)answer {
+    NSMutableArray<NSString *> *answerStrings = [[NSMutableArray alloc] init];
+    if ([answer isKindOfClass:[NSNull class]] ) {
+        return @"";
+    }
+    for (id answerValue in (NSArray *)answer) {
+        NSLog(@"%@", answer);
+        if ([answerValue containsString:@"|"]) {
+            NSLog(@"string contains bla!");
+            NSArray *split = [answerValue componentsSeparatedByString:@"|"];
+            [answerStrings addObject:split[0]];
+          }
+    }
+    return [answerStrings componentsJoinedByString:@"\n"];
+}
+
+-(void)setValueToTextFild:(NSArray *)indexes withAnswer:(NSString *)answer{
+    for (NSUInteger index = 0; index < self.size; index++ ) {
+        BOOL selected = [indexes containsObject:@(index)];
+        
+        if (selected) {
+            // In case the cell has not been created, need to create cell
+            ORKChoiceViewCell *cell = [self cellAtIndex:index withReuseIdentifier:nil];
+            if ([cell isKindOfClass:[ORKChoiceOtherViewCell class]]) {
+                ORKChoiceOtherViewCell *choiceOtherViewCell = (ORKChoiceOtherViewCell *)cell;
+//                choiceOtherViewCell.delegate = self;
+                choiceOtherViewCell.textView.text = answer;
+            }
+        } else {
+            // It is ok to not create the cell at here
+            ORKChoiceViewCell *cell = _cells[@(index)];
+            [cell setCellSelected:NO highlight:NO];
+        }
+    }
+   
 }
 
 - (void)setSelectedIndexes:(NSArray *)indexes {

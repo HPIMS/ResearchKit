@@ -54,6 +54,7 @@
         } else if ([answerFormat isKindOfClass:[ORKTextChoiceAnswerFormat class]]) {
             ORKTextChoiceAnswerFormat *textChoiceAnswerFormat = (ORKTextChoiceAnswerFormat *)answerFormat;
             _choices = textChoiceAnswerFormat.textChoices;
+            NSLog(@"%@", _choices);
         } else if ([answerFormat isKindOfClass:[ORKImageChoiceAnswerFormat class]]) {
             ORKImageChoiceAnswerFormat *imageChoiceAnswerFormat = (ORKImageChoiceAnswerFormat *)answerFormat;
             _choices = imageChoiceAnswerFormat.imageChoices;
@@ -218,6 +219,17 @@
         if (text != nil) {
             [answerStrings addObject:text];
         }
+    }
+    
+    if ([answer isKindOfClass:[NSNull class]] ) {
+        return [answerStrings componentsJoinedByString:@"\n"];
+    }
+    for (id answerValue in (NSArray *)answer) {
+        if ([answerValue containsString:@"|"]) {
+            NSLog(@"string contains bla!");
+            NSArray *split = [answerValue componentsSeparatedByString:@"|"];
+            [answerStrings addObject:split[0]];
+          }
     }
     return [answerStrings componentsJoinedByString:@"\n"];
 }

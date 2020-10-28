@@ -1092,6 +1092,7 @@ static const CGFloat DelayBeforeAutoScroll = 0.25;
         id answer = _savedAnswers[formItem.identifier];
         
         if (section.textChoiceCellGroup && ([section.textChoiceCellGroup cellAtIndexPath:indexPath withReuseIdentifier:identifier] != nil)) {
+            NSLog(@"%@",answer);
             [section.textChoiceCellGroup setAnswer:answer];
             section.textChoiceCellGroup.delegate = self;
             ORKChoiceViewCell *choiceViewCell = nil;
@@ -1099,6 +1100,11 @@ static const CGFloat DelayBeforeAutoScroll = 0.25;
             if ([choiceViewCell isKindOfClass:[ORKChoiceOtherViewCell class]]) {
                 ORKChoiceOtherViewCell *choiceOtherViewCell = (ORKChoiceOtherViewCell *)choiceViewCell;
                 choiceOtherViewCell.delegate = self;
+              //  choiceOtherViewCell.textView.text = "dfgdfgdfg"
+                NSString * answerother = [self stringForChoiceAnswer:answer];
+                if ([answerother length] > 0) {
+                    [choiceOtherViewCell hideTextView:false];
+                }
             }
             choiceViewCell.useCardView = [self formStep].useCardView;
             choiceViewCell.cardViewStyle = [self formStep].cardViewStyle;
@@ -1204,6 +1210,23 @@ static const CGFloat DelayBeforeAutoScroll = 0.25;
     cell.userInteractionEnabled = !self.readOnlyMode;
     
     return cell;
+}
+
+
+- (NSString *)stringForChoiceAnswer:(id)answer {
+    NSMutableArray<NSString *> *answerStrings = [[NSMutableArray alloc] init];
+    if ([answer isKindOfClass:[NSNull class]] ) {
+        return  @"";
+    }
+    for (id answerValue in (NSArray *)answer) {
+        NSLog(@"%@", answer);
+        if ([answerValue containsString:@"|"]) {
+            NSLog(@"string contains bla!");
+            NSArray *split = [answerValue componentsSeparatedByString:@"|"];
+            [answerStrings addObject:split[0]];
+          }
+    }
+    return [answerStrings componentsJoinedByString:@"\n"];
 }
 
 - (BOOL)isChoiceSelected:(id)value atIndex:(NSUInteger)index answer:(id)answer {
