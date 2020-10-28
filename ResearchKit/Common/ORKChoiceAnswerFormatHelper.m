@@ -110,7 +110,15 @@
         if ([choice isKindOfClass: [ORKTextChoiceOther class]]) {
             textChoiceOther = (ORKTextChoiceOther *)choice;
         }
+        
         id value = textChoiceOther.textViewText ? : choice.value;
+    //    value = @"dfgfdgfdgdfg";
+      //  value = choice.value;
+        if (textChoiceOther.textViewText) {
+            value = [NSString stringWithFormat: @"%@|%@",textChoiceOther.textViewText, choice.value];
+        }
+        
+        NSLog(@"%@", value);
         if (value == nil) {
             value = _isValuePicker ? @(index - 1) : @(index);
         }
@@ -119,6 +127,7 @@
             // Don't add to answer array if this index is the 1st value of a value picker
         } else {
             [array addObject:value];
+            
         }
     }
     return array.count > 0 ? [array copy] : ORKNullAnswerValue();
@@ -150,13 +159,21 @@
             for ( id<ORKAnswerOption> choice in _choices) {
                 if ([choice isKindOfClass:[ORKTextChoiceOther class]]) {
                     ORKTextChoiceOther *textChoiceOther = (ORKTextChoiceOther *)choice;
+                    NSLog(@"%@", textChoiceOther.value);
                     if ([textChoiceOther.textViewText isEqual:answerValue]) {
                         matchedChoice = choice;
                         break;
                     } else if (textChoiceOther.textViewInputOptional && textChoiceOther.textViewText.length <= 0 && [textChoiceOther.value isEqual:answerValue]) {
                         matchedChoice = choice;
                         break;
-                    }
+                    }if ([answerValue containsString:@"|"]) {
+                        NSLog(@"string contains bla!");
+                        NSArray *split = [answerValue componentsSeparatedByString:@"|"];
+                        if ([textChoiceOther.value isEqual:split[1]]) {
+                            matchedChoice = choice;
+                            break;
+                        }
+                      }
                 } else if ([choice.value isEqual:answerValue]) {
                     matchedChoice = choice;
                     break;

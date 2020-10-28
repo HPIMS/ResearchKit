@@ -119,10 +119,20 @@
 }
 
 - (void)updateTextViewForChoiceOtherCell:(ORKChoiceOtherViewCell *)choiceCell withTextChoiceOther:(ORKTextChoiceOther *)choiceOther {
-    if (choiceOther.textViewStartsHidden && choiceCell.textView.text.length <= 0) {
+//    [choiceCell hideTextView:!choiceCell.textViewHidden];
+//    [self.delegate tableViewCellHeightUpdated];
+//    if (choiceOther.textViewStartsHidden && choiceCell.textView.text.length <= 0) {
+//
+//    }
+    if (choiceCell.textView.text.length > 0) {
+        [choiceCell hideTextView:false];
+        [self.delegate tableViewCellHeightUpdated];
+    }else{
         [choiceCell hideTextView:!choiceCell.textViewHidden];
         [self.delegate tableViewCellHeightUpdated];
     }
+    
+    
 }
 
 - (void)textViewDidResignResponderForCellAtIndexPath:(NSIndexPath *)indexPath {
@@ -132,6 +142,10 @@
     NSUInteger index = indexPath.row - _beginningIndexPath.row;
     ORKChoiceOtherViewCell *touchedCell = (ORKChoiceOtherViewCell *) [self cellAtIndex:index withReuseIdentifier:nil];
     ORKTextChoiceOther *textChoice = (ORKTextChoiceOther *) [_helper textChoiceAtIndex:index];
+    
+//    if (touchedCell.textView) {
+//        <#statements#>
+//    }
     
     if (touchedCell.textView.text.length > 0) {
         textChoice.textViewText = touchedCell.textView.text;
@@ -187,6 +201,7 @@
     }
     
     _answer = [_helper answerForSelectedIndexes:[self selectedIndexes]];
+    NSLog(@"%@", _answer);
     [self.delegate answerChangedForIndexPath:indexPath];
 }
 

@@ -1026,6 +1026,7 @@ static NSArray *ork_processTextChoices(NSArray<ORKTextChoice *> *textChoices) {
     if (_helper == nil) {
         _helper = [[ORKChoiceAnswerFormatHelper alloc] initWithAnswerFormat:self];
     }
+    NSLog(@"%@", answer);
     return [_helper stringForChoiceAnswer:answer];
 }
 
