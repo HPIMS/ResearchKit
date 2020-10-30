@@ -654,6 +654,12 @@ static NSString *const _ChildNavigationControllerRestorationKey = @"childNavigat
     if (_currentStepViewController) {
         [self setUpProgressLabelForStepViewController:_currentStepViewController];
     }
+    
+    if (self.hideNavbar) {
+        [_childNavigationController setNavigationBarHidden:true animated:YES];
+    }
+    
+   
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -1606,6 +1612,12 @@ static NSString *const _ORKProgressMode = @"progressMode";
 - (void)setNavigationBarHidden:(BOOL)hidden animated:(BOOL)animated {
     [_childNavigationController setNavigationBarHidden:hidden animated:YES];
 }
+
+//-(void)viewWillAppear:(BOOL)animated
+//{
+// [super viewWillAppear:animated];
+//    [_childNavigationController setNavigationBarHidden:true animated:YES];
+//}
 
 - (UINavigationBar *)navigationBar {
     return _childNavigationController.navigationBar;

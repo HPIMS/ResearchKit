@@ -548,7 +548,7 @@ ORK_CLASS_AVAILABLE
  By default, the task view controller includes a visible navigation bar. To disable the display of the navigation bar, set this property to `NO`.
  */
 @property (nonatomic, getter=isNavigationBarHidden) BOOL navigationBarHidden;
-
+@property (nonatomic) BOOL hideNavbar;
 /**
  Shows or hides the navigation bar, with optional animation.
  
