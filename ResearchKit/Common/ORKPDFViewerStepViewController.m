@@ -213,9 +213,11 @@
 #pragma mark ORKPDFViewerStepViewDelegate
 
 - (void)didSelectShareButton:(id)sender {
-    NSData *pdfData = [[_pdfView getDocument] dataRepresentation];
+    
+  //  NSData *pdfData = [[_pdfView getDocument] dataRepresentation];
+    NSLog(@"%@", [self pdfViewerStep].pdfURL);
 
-    UIActivityViewController * activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[@"sendPDF", pdfData] applicationActivities:nil];
+    UIActivityViewController * activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[[self pdfViewerStep].pdfURL] applicationActivities:nil];
     [activityViewController setCompletionWithItemsHandler:^(UIActivityType  _Nullable activityType, BOOL completed, NSArray * _Nullable returnedItems, NSError * _Nullable activityError) {
         [_pdfView updateShareButton];
     }];
